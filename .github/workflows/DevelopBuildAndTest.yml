@@ -1,0 +1,34 @@
+# This workflow will build a Swift project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-swift
+
+name: Develop Build and Test
+
+on:
+  push:
+    branches: ["develop"]
+  pull_request:
+    branches: ["develop"]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '15.4' # 원하는 Xcode 버전으로 변경
+
+    - name: Install dependencies if Podfile exists
+      run: pod install || echo "No Podfile found, skipping pod install"
+
+    - name: Build app
+      run: |
+        xcodebuild -workspace PlayPop.xcworkspace -scheme PlayPop -sdk iphonesimulator -configuration Debug build | xcpretty
+
+    - name: Run tests
+      run: |
+        xcodebuild -workspace PlayPop.xcworkspace -scheme PlayPop -sdk iphonesimulator -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 14' test | xcpretty
