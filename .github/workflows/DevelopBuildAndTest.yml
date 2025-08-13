@@ -20,7 +20,7 @@ jobs:
     - name: Set up Xcode
       uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: '15.4' # 원하는 Xcode 버전으로 변경
+        xcode-version: '16.4' # 원하는 Xcode 버전으로 변경
 
     - name: Install dependencies if Podfile exists
       run: pod install || echo "No Podfile found, skipping pod install"
